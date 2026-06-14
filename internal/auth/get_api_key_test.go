@@ -10,7 +10,7 @@ func TestGetAPIKey(t *testing.T) {
 	headers := http.Header{}
 	headers.Set("Authorization", "ApiKey my-secret-key")
 	key, err := GetAPIKey(headers)
-        if err != nil || key != "wrong-key" {
+	if err != nil || key != "my-secret-key" {
         t.Errorf("Expected my-secret-key, got %v", key)
 }
 	// Test case: Empty header
