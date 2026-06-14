@@ -16,7 +16,7 @@ jobs:
           go-version: '1.22'
       - run: go test ./...
 
-        Style:
+  Style:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
