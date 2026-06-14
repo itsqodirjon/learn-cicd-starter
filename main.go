@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time" // 1. Vaqt paketi qo'shildi
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -16,6 +17,7 @@ import (
 
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
+
 type apiConfig struct {
 	DB *database.Queries
 }
@@ -36,8 +38,6 @@ func main() {
 
 	apiCfg := apiConfig{}
 
-	// https://github.com/libsql/libsql-client-go/#open-a-connection-to-sqld
-	// libsql://[your-database].turso.io?authToken=[your-auth-token]
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		log.Println("DATABASE_URL environment variable is not set")
@@ -87,9 +87,14 @@ func main() {
 	v1Router.Get("/healthz", handlerReadiness)
 
 	router.Mount("/v1", v1Router)
+
+	// 2. Xavfsiz server konfiguratsiyasi
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
+		Addr:         ":" + port,
+		Handler:      router,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	log.Printf("Serving on port: %s\n", port)
