@@ -1,5 +1,7 @@
 package main
-
+func unused() {
+    // bu funksiya staticcheck uchun
+}
 import (
 	"database/sql"
 	"embed"
@@ -95,4 +97,7 @@ func main() {
 
 	log.Printf("Serving on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())
+}
+func unused() {
+    // bu funksiya hech qayerda chaqirilmaydi
 }
