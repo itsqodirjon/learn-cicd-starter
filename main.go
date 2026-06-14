@@ -1,7 +1,4 @@
 package main
-func unused() {
-    // bu funksiya staticcheck uchun
-}
 import (
 	"database/sql"
 	"embed"
