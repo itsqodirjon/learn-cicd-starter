@@ -16,12 +16,15 @@ import (
 
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
+
 func unusedFunction() {
-    println("unused")
+	println("unused")
 }
+
 type apiConfig struct {
 	DB *database.Queries
 }
+
 //go:embed static/*
 var staticFiles embed.FS
 
@@ -97,4 +100,3 @@ func main() {
 	log.Printf("Serving on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())
 }
-
