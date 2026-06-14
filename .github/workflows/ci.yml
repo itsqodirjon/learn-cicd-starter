@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.26.0"
+          go-version: "1.22.0" # go.mod faylingizdagi versiyaga moslang
       - run: go test -cover ./...
 
   style:
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.26.0"
+          go-version: "1.22.0"
       - run: |
           if [ -n "$(go fmt ./...)" ]; then
             echo "Code is not formatted properly"
