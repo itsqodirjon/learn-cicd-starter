@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PROJECT_ID: "499411"  # Sizning GCP Project ID
+      PROJECT_ID: "499411"
       REGION: "us-central1"
       REPO_NAME: "notely-ar-repo"
       IMAGE_NAME: "notely"
@@ -22,33 +22,24 @@ jobs:
       - name: Install goose
         run: go install github.com/pressly/goose/v3/cmd/goose@latest
 
-      - name: Authenticate with GCP
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      # GCP autentifikatsiya qismini ham kommentga oldik, 
+      # chunki billing yo'qligi uchun xato berishi mumkin.
+      # - name: Authenticate with GCP
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      # - name: Set up Cloud SDK
+      #   uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+      # - name: Configure Docker
+      #   run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      - name: Build and Push Docker image
-        run: |
-          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest .
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest
+      # - name: Build and Push Docker image
+      #   run: |
+      #     docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest .
+      #     docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Run migrations
         run: ./scripts/migrateup.sh
-
-      # Billing muammosi hal bo'lmaguncha pastdagi deploy qismini 
-      # shunchaki # belgilari bilan komment qilib turing!
-      
-      # - name: Deploy to Cloud Run
-      #   run: |
-      #     gcloud run deploy notely \
-      #       --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest \
-      #       --platform managed \
-      #       --region ${{ env.REGION }} \
-      #       --allow-unauthenticated \
-      #       --set-env-vars DATABASE_URL=${{ env.DATABASE_URL }}
+        # Migration uchun DATABASE_URL sekret sifatida env'da berilgan.
